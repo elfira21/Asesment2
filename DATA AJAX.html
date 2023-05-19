@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Occurrence</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: "https://api.gbif.org/v1/occurrence/search?year=1800,1899",
+        method: 'GET',
+        success: function(response) {
+          var occurrences = response.results;
+          var resultHTML = '<table><thead><tr><th>Scientific Name</th><th>Kingdom</th><th>Phylum</th><th>Class</th><th>Order</th><th>Family</th></tr></thead><tbody>';
+          
+          for (var i = 0; i < occurrences.length; i++) {
+            var occurrence = occurrences[i];
+            var scientificName = occurrence.scientificName;
+            var kingdom = occurrence.kingdom;
+            var phylum = occurrence.phylum;
+            var classValue = occurrence.class;
+            var order = occurrence.order;
+            var family = occurrence.family;
+            
+            resultHTML += '<tr><td>' + scientificName + '</td><td>' + kingdom + '</td><td>' + phylum + '</td><td>' + classValue + '</td><td>' + order + '</td><td>' + family + '</td></tr>';
+          }
+          
+          resultHTML += '</tbody></table>';
+          $('#result').html(resultHTML);
+        },
+        error: function() {
+          $('#result').html('<p>Error retrieving data.</p>');
+        }
+      });
+    });
+  </script>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Data Occurrence</h1>
+  <div id="result"></div>
+</body>
+</html>
